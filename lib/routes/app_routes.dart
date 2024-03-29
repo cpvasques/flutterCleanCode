@@ -5,6 +5,6 @@ class AppRoutes {
   static const String loginPage = '/login';
 
   static Map<String, WidgetBuilder> routes = {
-    loginPage: (context) => LoginPage(),
+    loginPage: (context) => const LoginPage(),
   };
 }

@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_clean_code/core/error/repository_exception.dart';
 import 'package:flutter_clean_code/features/login/domain/usecases/login_usecase.dart';
 import 'login_event.dart';
 import 'login_state.dart';
@@ -11,10 +12,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<PasswordChanged>(
         (event, emit) => emit(state.copyWith(password: event.password)));
     on<Submitted>(onSubmitted);
+    on<ErrorDisplayed>((event, emit) => emit(state.copyWith(isError: false)));
   }
 
   Future<void> onSubmitted(Submitted event, Emitter<LoginState> emit) async {
-    emit(state.copyWith(isSubmitting: true));
+    emit(state.copyWith(isLoading: true));
 
     try {
       await loginUseCase.execute(
@@ -22,9 +24,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         password: state.password,
       );
 
-      emit(state.copyWith(isSuccess: true, isSubmitting: false));
-    } catch (error) {
-      emit(state.copyWith(isError: true, isSubmitting: false));
+      emit(state.copyWith(isSuccess: true, isLoading: false));
+    } on RepositoryException catch (e) {
+      emit(
+        state.copyWith(
+          isError: true,
+          isLoading: false,
+          errorMessage: e.message,
+        ),
+      );
     }
   }
 }

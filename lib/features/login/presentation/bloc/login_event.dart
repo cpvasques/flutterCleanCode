@@ -24,3 +24,5 @@ class PasswordChanged extends LoginEvent {
 }
 
 class Submitted extends LoginEvent {}
+
+class ErrorDisplayed extends LoginEvent {}

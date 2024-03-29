@@ -1,20 +1,31 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+import 'package:flutter_clean_code/core/error/repository_exception.dart';
+import 'package:flutter_clean_code/core/network/api_client.dart';
 
 import '../models/login_model.dart';
 
 class LoginDataSource {
-  Future<LoginResponseModel> authenticate(String email, String password) async {
-    final response = await http.post(
-      Uri.parse('https://your-api-url.com/login'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': email, 'password': password}),
-    );
+  final CustomDio dio;
 
-    if (response.statusCode == 200) {
-      return LoginResponseModel.fromJson(json.decode(response.body));
-    } else {
-      throw Exception('Failed to login');
+  LoginDataSource({required this.dio});
+
+  Future<LoginResponseModel> authenticate(String email, String password) async {
+    final payload = {'email': email, 'password': password};
+
+    try {
+      final response = await dio.unauth().post(
+            'auth/login',
+            data: jsonEncode(payload),
+          );
+
+      if (response.statusCode == 200) {
+        return LoginResponseModel.fromJson(json.decode(response.data));
+      } else {
+        throw Exception('Failed to login');
+      }
+    } on DioException catch (e) {
+      throw RepositoryException.fromDioError(e);
     }
   }
 }

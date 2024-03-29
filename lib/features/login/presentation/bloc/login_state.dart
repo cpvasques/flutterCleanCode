@@ -3,34 +3,38 @@ import 'package:equatable/equatable.dart';
 class LoginState extends Equatable {
   final String email;
   final String password;
-  final bool isSubmitting;
+  final String errorMessage;
   final bool isSuccess;
   final bool isError;
+  final bool isLoading;
 
   const LoginState({
     this.email = '',
     this.password = '',
-    this.isSubmitting = false,
+    this.errorMessage = '',
     this.isSuccess = false,
     this.isError = false,
+    this.isLoading = false,
   });
 
   LoginState copyWith({
     String? email,
     String? password,
-    bool? isSubmitting,
+    String? errorMessage,
     bool? isSuccess,
     bool? isError,
+    bool? isLoading,
   }) {
     return LoginState(
-      email: email ?? this.email,
-      password: password ?? this.password,
-      isSubmitting: isSubmitting ?? this.isSubmitting,
-      isSuccess: isSuccess ?? this.isSuccess,
-      isError: isError ?? this.isError,
-    );
+        email: email ?? this.email,
+        password: password ?? this.password,
+        errorMessage: errorMessage ?? this.errorMessage,
+        isSuccess: isSuccess ?? this.isSuccess,
+        isError: isError ?? this.isError,
+        isLoading: isLoading ?? this.isLoading);
   }
 
   @override
-  List<Object> get props => [email, password, isSubmitting, isSuccess, isError];
+  List<Object> get props =>
+      [email, password, errorMessage, isSuccess, isError, isLoading];
 }

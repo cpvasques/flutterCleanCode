@@ -1,4 +1,4 @@
-package com.testecleancode.flutter_clean_code
+package com.fluttercleancode.flutter_clean_code
 
 import io.flutter.embedding.android.FlutterActivity
 
