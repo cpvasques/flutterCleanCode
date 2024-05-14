@@ -1,6 +1,9 @@
+// Flutter Packages
 import 'package:flutter/material.dart';
-import 'package:flutter_clean_code/core/utils/loader.dart';
-import 'package:flutter_clean_code/core/utils/messages.dart';
+
+// Core
+import 'package:flutter_clean_code/core/presentation/widgets/loader.dart';
+import 'package:flutter_clean_code/core/presentation/widgets/messages.dart';
 
 abstract class BaseState<T extends StatefulWidget> extends State<T>
     with Loader, Messages {

@@ -1,21 +1,23 @@
-import 'package:dio/io.dart';
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 import 'package:flutter_clean_code/core/network/interceptors/auth_interceptor.dart';
 
-import '/core/config/environment_config.dart';
+import '/core/config/env_config.dart';
 
-late AuthInterceptor _authInterceptor;
+@lazySingleton
+class CustomDio {
+  late Dio _dio;
+  late AuthInterceptor _authInterceptor;
 
-class CustomDio extends DioForNative {
-  CustomDio()
-      : super(
-          BaseOptions(
-            baseUrl: EnvironmentConfig.apiUrl,
-            connectTimeout: const Duration(seconds: 30),
-            receiveTimeout: const Duration(seconds: 60),
-          ),
-        ) {
-    interceptors.add(
+  CustomDio() {
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: EnvConfig.apiUrl,
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 60),
+      ),
+    );
+    _dio.interceptors.add(
       LogInterceptor(
         requestBody: true,
         responseBody: true,
@@ -23,30 +25,30 @@ class CustomDio extends DioForNative {
     );
   }
 
-  CustomDio auth() {
+  Dio auth() {
     _authInterceptor = AuthInterceptor();
-    if (interceptors
+    if (_dio.interceptors
         .where((element) => element.runtimeType == AuthInterceptor)
-        .isNotEmpty) {
-      return this;
+        .isEmpty) {
+      _dio.interceptors.add(_authInterceptor);
     }
-    interceptors.add(_authInterceptor);
-    return this;
+    return _dio;
   }
 
-  CustomDio unauth() {
-    clearIntercepetors();
-    interceptors.add(
+  Dio unauth() {
+    clearInterceptors();
+    _dio.interceptors.add(
       LogInterceptor(
         requestBody: true,
         responseBody: true,
       ),
     );
-    return this;
+    return _dio;
   }
 
-  clearIntercepetors() {
-    interceptors.clear();
-    return;
+  void clearInterceptors() {
+    _dio.interceptors.clear();
   }
+
+  Dio get dio => _dio;
 }

@@ -24,6 +24,12 @@
   flutter pub get
 ```
 
+### Gerar código de injeção de dependência
+
+```sh
+  flutter pub run build_runner build --delete-conflicting-outputs
+```
+
 ### Rode o projeto
 
 ```sh

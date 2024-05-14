@@ -5,14 +5,20 @@ class AuthInterceptor extends Interceptor {
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
+    const token = 'token';
 
-    if (token != null) {
-      options.headers['Authorization'] = 'Bearer $token';
-    }
+    options.headers['token'] = token;
 
     handler.next(options);
+
+    // Deixei comentado para exemplificar como ficaria uma lógica de token
+    // armazenado no SharedPreferences;
+
+    // final prefs = await SharedPreferences.getInstance();
+    // final token = prefs.getString('token');
+    // if (token != null) {
+    //   options.headers['Authorization'] = 'Bearer $token';
+    // }
   }
 
   @override

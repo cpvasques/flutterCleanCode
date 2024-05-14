@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
-import '../features/login/presentation/pages/login_page.dart';
+import 'package:go_router/go_router.dart';
+import '../features/dashboard/presentation/pages/dashboard_page.dart';
 
 class AppRoutes {
-  static const String loginPage = '/login';
+  static const String dashboardPage = '/dashboard';
 
-  static Map<String, WidgetBuilder> routes = {
-    loginPage: (context) => const LoginPage(),
-  };
+  static final GoRouter router = GoRouter(
+    initialLocation: dashboardPage,
+    routes: <GoRoute>[
+      GoRoute(
+        path: dashboardPage,
+        builder: (BuildContext context, GoRouterState state) =>
+            const DashboardPage(),
+      ),
+    ],
+  );
 }

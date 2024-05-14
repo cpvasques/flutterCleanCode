@@ -10,6 +10,17 @@
       "type": "dart"
     },
     {
+      "name": "flutter_clean_code (web)",
+      "request": "launch",
+      "type": "dart",
+      "args": [
+        "-d",
+        "chrome",
+        "--web-port",
+        "4445"
+      ],
+    },
+    {
       "name": "flutter_clean_code (profile mode)",
       "request": "launch",
       "type": "dart",
