@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Core
 import 'package:flutter_clean_code/core/presentation/base_state.dart';
 import 'package:flutter_clean_code/core/templates/app_scaffold.dart';
+import 'package:flutter_clean_code/core/services/socket_service.dart';
 import 'package:flutter_clean_code/core/di/injection.dart';
 import 'package:flutter_gen/gen_l10n/localization.dart';
 
@@ -24,17 +25,29 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends BaseState<DashboardPage> {
   late DashboardBloc _dashboardBloc;
+  final SocketService _socketService = getIt<SocketService>();
 
   @override
   void initState() {
     super.initState();
     _dashboardBloc = getIt<DashboardBloc>();
-    _dashboardBloc.add(FetchSectionsEvent(isOriginal: true));
+    _dashboardBloc.add(const FetchSectionsEvent(isOriginal: true));
+
+    //Conectar ao servidor de socket
+    _socketService.connect('/investments');
+    _socketService.connect('/sellers');
+
+    _socketService.on('/investments', 'dataUpdate', (data) {
+      print('Received investment message: $data');
+    });
   }
 
   @override
   void dispose() {
     _dashboardBloc.close();
+
+    // Desconectar ao sair da página
+    _socketService.disconnectAll();
     super.dispose();
   }
 
