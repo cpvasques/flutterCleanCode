@@ -44,7 +44,9 @@ class RepositoryException implements Exception {
       case 403:
         return 'Forbidden';
       case 404:
-        return error['message'];
+        // Definir padrão vindo do backend
+        // return error['message'];
+        return 'Not found';
       case 500:
         return 'Internal server error';
       case 502:
